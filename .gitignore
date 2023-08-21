@@ -12,7 +12,7 @@ cmake-build-*/
 
 ### Visual Studio Code ###
 .vscode/
-.code-workspace
+philosophers.code-workspace
 
 # Local History
 .history/
