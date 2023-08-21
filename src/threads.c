@@ -1,38 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/21 12:08:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/21 18:11:31 by ljustici         ###   ########.fr       */
+/*   Created: 2023/08/21 18:07:02 by ljustici          #+#    #+#             */
+/*   Updated: 2023/08/21 18:07:50 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void *creating(void *data)
+void create_threads(pthread_t *threads, int n)
 {
-	(void) data;
-	printf("Creating a thread...\n");
-	return (NULL);
+	int i;
+
+	i = 0;
+	while(i < n)
+	{
+		if (pthread_create(&threads[i], NULL, creating, NULL) == -1)
+			printf("Error: pthread_create failed.\n");
+		else
+		{
+			printf("Created thread [%ld]\n", (long)threads[i]);
+		}
+		i++;
+	}
 }
 
-int	main(int argc, char **argv)
+void join_threads(pthread_t *threads, int n)
 {
-	t_philo *philos = NULL;
-	pthread_mutex_t *forks = NULL;
 	int i;
-	int n;
-	
-	if (argc > 1)
+
+	i = 0;
+	while (i < n)
 	{
-		i = 0;
-		n = ft_atoi(argv[1]);
-		philos = malloc(sizeof(t_philo *));
-		create_threads(&philos->philo, n);
-		join_threads(&philos->philo, n);
+		pthread_join(threads[i], NULL);
+		printf("Main: Joining thread [%ld]\n", (long)threads[i]);
+		i++;
 	}
-	return (0);
 }

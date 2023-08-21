@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:17:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/21 15:48:10 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/21 17:41:11 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-typedef struct s_data
+typedef struct s_philo
 {
-	
+	pthread_t	philo;
+	int			id;
 }	t_philo;
 
 int	ft_atoi(const char *str);

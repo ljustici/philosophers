@@ -1,38 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   mutexes.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/21 12:08:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/21 18:11:31 by ljustici         ###   ########.fr       */
+/*   Created: 2023/08/21 18:07:37 by ljustici          #+#    #+#             */
+/*   Updated: 2023/08/21 18:10:14 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void *creating(void *data)
+void create_mutexes(pthread_mutex_t *mutexes, int n)
 {
-	(void) data;
-	printf("Creating a thread...\n");
-	return (NULL);
+	int i;
+
+	i = 0;
+	while(i < n)
+	{
+		if (pthread_mutex_init(&mutexes[i], NULL) == -1)
+			printf("Error: pthread_mutex_init failed.\n");
+		i++;
+	}
 }
 
-int	main(int argc, char **argv)
+void destroy_mutexes(pthread_mutex_t *mutexes, int n)
 {
-	t_philo *philos = NULL;
-	pthread_mutex_t *forks = NULL;
 	int i;
-	int n;
-	
-	if (argc > 1)
+
+	i = 0;
+	while(i < n)
 	{
-		i = 0;
-		n = ft_atoi(argv[1]);
-		philos = malloc(sizeof(t_philo *));
-		create_threads(&philos->philo, n);
-		join_threads(&philos->philo, n);
+		if (pthread_mutex_destroy(&mutexes[i]) == -1)
+			printf("Error: pthread_mutex_destroy failed.\n");
+		i++;
 	}
-	return (0);
 }
