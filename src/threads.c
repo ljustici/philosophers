@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:02 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/22 14:52:08 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/22 16:37:44 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void create_threads(t_philo *philo, int n)
 		else
 		{
 			philo[i].id = i + 1;
+			philo[i].total = n;
 			//printf("Created thread [%ld] as Philosopher %i\n", (long)philo[i].philo, philo[i].id);
 		}
 		i++;

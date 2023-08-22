@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 14:50:10 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/22 15:59:30 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/22 16:44:26 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,16 @@ void do_eat(t_philo *philo)
     pthread_mutex_unlock(philo->fork_left);
 }
 
-void do_sleep(t_philo philo)
+void do_sleep(t_philo *philo)
 {
-	printf("Philosopher %i is sleeping.\n", philo.id);
-	usleep(philo.sleep_time);
+    unsigned long time;
+
+    if (philo->sleep_time < philo->die_time)
+        time = philo->die_time - philo->sleep_time;
+    else
+        time = philo->sleep_time - philo->die_time;
+	printf("Philosopher %i is sleeping.\n", philo->id);
+	usleep(time);
 }
 
 void do_think(t_philo philo)

@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:08:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/22 15:59:45 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/22 16:42:59 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,18 @@
 void *routine(void *data)
 {
 	t_philo *philo = (t_philo *)data;
-	do_take(philo);
-	do_eat(philo);
+	
+	if (philo->total % 2 == 0)
+	{
+		do_take(philo);
+		do_eat(philo);
 	//do_sleep(*philo);
 	//do_think(*philo);
+	}
+	else
+	{
+		do_sleep(philo);
+	}
 	return (NULL);
 }
 
