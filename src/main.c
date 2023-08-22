@@ -6,23 +6,25 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:08:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/21 18:11:31 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/22 15:59:45 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void *creating(void *data)
+void *routine(void *data)
 {
-	(void) data;
-	printf("Creating a thread...\n");
+	t_philo *philo = (t_philo *)data;
+	do_take(philo);
+	do_eat(philo);
+	//do_sleep(*philo);
+	//do_think(*philo);
 	return (NULL);
 }
 
 int	main(int argc, char **argv)
 {
 	t_philo *philos = NULL;
-	pthread_mutex_t *forks = NULL;
 	int i;
 	int n;
 	
@@ -31,8 +33,8 @@ int	main(int argc, char **argv)
 		i = 0;
 		n = ft_atoi(argv[1]);
 		philos = malloc(sizeof(t_philo *));
-		create_threads(&philos->philo, n);
-		join_threads(&philos->philo, n);
+		create_threads(philos, n);
+		join_threads(philos, n);
 	}
 	return (0);
 }
