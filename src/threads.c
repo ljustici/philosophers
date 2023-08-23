@@ -6,41 +6,44 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:02 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/22 16:37:44 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/23 12:35:01 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void create_threads(t_philo *philo, int n)
+void create_threads(t_philo *philo)
 {
 	int i;
 
 	i = 0;
-	create_mutexes(philo, n);
-	while(i < n)
+	create_mutexes(philo);
+	while(i < philo->total)
 	{
-		if (pthread_create(&philo[i].philo, NULL, routine, &philo[i]) == -1)
-			printf("Error: pthread_create failed.\n");
+		if (philo->total % 2 != 0)
+		{
+			if (pthread_create(&philo[i].philo, NULL, routine_odd, &philo[i]) == -1)
+				printf("Error: pthread_create failed.\n");
+		}
 		else
 		{
-			philo[i].id = i + 1;
-			philo[i].total = n;
-			//printf("Created thread [%ld] as Philosopher %i\n", (long)philo[i].philo, philo[i].id);
+			if (pthread_create(&philo[i].philo, NULL, routine_even, &philo[i]) == -1)
+				printf("Error: pthread_create failed.\n");
 		}
+		philo[i].id = i + 1;
 		i++;
 	}
 }
 
-void join_threads(t_philo *philo, int n)
+void join_thread(t_philo *philo)
 {
 	int i;
 
 	i = 0;
-	while (i < n)
+	while (i < philo->total)
 	{
 		pthread_join(philo[i].philo, NULL);
-		printf("Main: Joining thread [%ld]\n", (long)philo[i].philo);
+		printf("Philosopher [%i] has died.\n", philo[i].id);
 		i++;
 	}
 }

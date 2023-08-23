@@ -6,25 +6,27 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/22 15:54:20 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/23 11:52:20 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void create_mutexes(t_philo *philo, int n)
+void create_mutexes(t_philo *philo)
 {
 	int i;
+	int n;
 
 	i = 0;
-	while(i < n)
+	n = philo->total;
+	while(i < philo->total)
 	{
 		if (pthread_mutex_init(&philo[i].fork_right, NULL) == -1)
 			printf("Error: pthread_mutex_init failed.\n");
 		i++;
 	}
 	i = 0;
-	while(i < n)
+	while(i < philo->total)
 	{
 		if (i == 0)
 			philo[i].fork_left = &philo[n-1].fork_right;
