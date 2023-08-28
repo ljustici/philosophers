@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/23 14:20:30 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/28 16:48:56 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,15 @@ int	ft_atoi(const char *str)
 	return (number * minus);
 }
 
-int	parse_args(char **argv, t_philo *philo)
+int	parse_args(char **argv, t_philo *philo, int *n)
 {
 	int	i;
-	int n;
 
 	i = 0;
-	n = ft_atoi(argv[1]);
-	if (n == 0)
+	*n = ft_atoi(argv[1]);
+	if (*n == 0)
 		return (-1);
-	while (i < n)
+	while (i < *n)
 	{
 		
 		philo[i].total = n;
@@ -56,6 +55,7 @@ int	parse_args(char **argv, t_philo *philo)
 		philo[i].eat_time = get_us(ft_atoi(argv[3]));
 		philo[i].sleep_time = get_us(ft_atoi(argv[4]));
 		philo[i].die_left = philo[i].die_time;
+		philo[i].fork_right = 0;
 		i++;
 	}
 	if (philo[i - 1].die_time == 0 || philo[i - 1].eat_time
@@ -72,4 +72,14 @@ unsigned long get_ms(suseconds_t usecs)
 unsigned long get_us(unsigned long ms)
 {
 	return (ms*1000);
+}
+
+unsigned long	get_current_time()
+{
+	unsigned long current_ms;
+	struct timeval current_us;
+	
+	gettimeofday(&current_us, NULL);
+	current_ms = get_ms(current_us.tv_usec);
+	return(current_ms);
 }

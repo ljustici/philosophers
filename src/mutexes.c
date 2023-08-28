@@ -6,27 +6,21 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/23 11:52:20 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/28 16:52:09 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-void create_mutexes(t_philo *philo)
+void set_forks(t_philo *philo)
 {
 	int i;
 	int n;
 
 	i = 0;
-	n = philo->total;
-	while(i < philo->total)
-	{
-		if (pthread_mutex_init(&philo[i].fork_right, NULL) == -1)
-			printf("Error: pthread_mutex_init failed.\n");
-		i++;
-	}
+	n = *(philo->total);
 	i = 0;
-	while(i < philo->total)
+	while(i < n)
 	{
 		if (i == 0)
 			philo[i].fork_left = &philo[n-1].fork_right;
@@ -44,7 +38,7 @@ void destroy_mutexes(pthread_mutex_t *mutexes, int n)
 	while(i < n)
 	{
 		if (pthread_mutex_destroy(mutexes) == -1)
-			printf("Error: pthread_mutex_destroy failed.\n");
+			write(2, "Internal error: pthread_mutex_destroy failed.\n", 46);
 		i++;
 	}
 }
