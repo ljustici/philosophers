@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/28 16:48:56 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/29 17:15:22 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,28 +39,31 @@ int	ft_atoi(const char *str)
 	return (number * minus);
 }
 
-int	parse_args(char **argv, t_philo *philo, int *n)
+int	parse_args(char **argv, t_philo **philo, int **n)
 {
 	int	i;
 
 	i = 0;
-	*n = ft_atoi(argv[1]);
-	if (*n == 0)
+	**n = ft_atoi(argv[1]);
+	//*philo = malloc((**n) * sizeof *philo);
+	if (**n == 0)
 		return (-1);
-	while (i < *n)
+	while (i < (**n))
 	{
-		
-		philo[i].total = n;
-		philo[i].die_time = get_us(ft_atoi(argv[2]));
-		philo[i].eat_time = get_us(ft_atoi(argv[3]));
-		philo[i].sleep_time = get_us(ft_atoi(argv[4]));
-		philo[i].die_left = philo[i].die_time;
-		philo[i].fork_right = 0;
+		philo[i] = malloc(sizeof *philo);
+		philo[i]->fork_right = 0;
+		philo[i]->total = *n;
+		philo[i]->die_time = get_us(ft_atoi(argv[2]));
+		philo[i]->eat_time = get_us(ft_atoi(argv[3]));
+		philo[i]->sleep_time = get_us(ft_atoi(argv[4]));
+		philo[i]->die_left = philo[i]->die_time;
+		philo[i]->fork_right = 0;
+		philo[i]->is_dead = 0;
 		i++;
 	}
-	if (philo[i - 1].die_time == 0 || philo[i - 1].eat_time
-		== 0 || philo[i - 1].sleep_time == 0)
-			return (-1);	
+	if (philo[i - 1]->die_time == 0 || philo[i - 1]->eat_time
+		== 0 || philo[i - 1]->sleep_time == 0)
+			return (-1);
 	return (0);
 }
 

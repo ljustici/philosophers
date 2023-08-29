@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/28 16:52:09 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/29 16:54:47 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@ void set_forks(t_philo *philo)
 	i = 0;
 	while(i < n)
 	{
-		if (i == 0)
-			philo[i].fork_left = &philo[n-1].fork_right;
+		//philo[i].fork_left = malloc(sizeof(int *));
+		if (i == n - 1)
+			philo[i].fork_left = &philo[0].fork_right;
 		else
 			philo[i].fork_left = &philo[i + 1].fork_right;
 		i++;
