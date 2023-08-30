@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 14:50:10 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 14:21:11 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 19:38:31 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void do_take(t_philo *philo)
 {   
-    is_fork_taken(&philo->fork_right,1);
-    is_fork_taken(philo->fork_left,1);
-	printf("[%lu] Philosopher %i has taken a fork.\n", get_current_time(), philo->id);
-	printf("[%lu] Philosopher %i has taken a fork.\n", get_current_time(), philo->id);
+    set_fork_taken(&philo->fork_right,1);
+    set_fork_taken(philo->fork_left,1);
+	printf("[%lu] Philosopher %i has taken a fork.\n", get_current_time() - philo->start, philo->id);
+	printf("[%lu] Philosopher %i has taken a fork.\n", get_current_time() - philo->start, philo->id);
 }
 
 void do_eat(t_philo *philo)
@@ -38,29 +38,23 @@ void do_eat(t_philo *philo)
             pthread_mutex_unlock(mutex);
         else
         {
-            time_left(&philo->die_left, philo->die_time);
+            set_time_left(&philo->die_left, philo->die_time);
             do_take(philo);
-            printf("%s[%lu] Philosopher %i is eating.%s\n", YELLOW, get_current_time(), philo->id, NC);
+            printf("%s[%lu] Philosopher %i is eating.%s time left: %lu\n", YELLOW, get_current_time() - philo->start, philo->id, NC, philo->die_left);
             usleep(time);
-            is_fork_taken(&philo->fork_right,0);
-            is_fork_taken(philo->fork_left,0);
+            set_fork_taken(&philo->fork_right,0);
+            set_fork_taken(philo->fork_left,0);
             pthread_mutex_unlock(mutex);
             if (is_dead(philo->die_left, philo->eat_time))
             {
                 *(philo->total) = 0;
                 philo->is_dead = 1;
                 pthread_mutex_lock(mutex);
-                printf("[%lu] Philosopher %i is dead.\n", get_current_time(), philo->id);
+                printf("[%lu] Philosopher %i is dead.\n", get_current_time() - philo->start, philo->id);
                 pthread_mutex_unlock(mutex);
             }
             else
-                time_left(&philo->die_left, time);
-            if (philo->id == 1)
-            {
-                pthread_mutex_lock(mutex);
-                printf("eating, die left: %lu\n", philo->die_left);
-                pthread_mutex_unlock(mutex);
-            }
+                set_time_left(&philo->die_left, philo->die_left - time);
         }
     }
 }
@@ -76,7 +70,7 @@ void do_sleep(t_philo *philo)
     mtx_print = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(mtx_print, NULL);
 	pthread_mutex_lock(mtx_print);
-	printf("[%lu] Philosopher %i is sleeping.\n", get_current_time(), philo->id);
+	printf("[%lu] Philosopher %i is sleeping. time left: %lu\n", get_current_time() - philo->start, philo->id, philo->die_left);
 	pthread_mutex_unlock(mtx_print);
 	usleep(time);
     pthread_mutex_lock(mtx_print);
@@ -84,12 +78,10 @@ void do_sleep(t_philo *philo)
     {
         *(philo->total) = 0;
         philo->is_dead = 1;
-        printf("[%lu] Philosopher %i is dead. time left: %lu, time sleep: %lu\n", get_current_time(), philo->id, philo->die_left, philo->sleep_time);
+        printf("[%lu] Philosopher %i is dead. time left: %lu, time sleep: %lu\n", get_current_time() - philo->start, philo->id, philo->die_left, philo->sleep_time);
     }
     else
-        time_left(&philo->die_left, time);
-    if (philo->id == 1)
-        printf("sleeping, die left: %lu\n", philo->die_left);
+        set_time_left(&philo->die_left, philo->die_left - time);
     pthread_mutex_unlock(mtx_print);
 }
 
@@ -104,7 +96,7 @@ void do_think(t_philo *philo)
     pthread_mutex_init(mtx_print, NULL);
     time = (philo->die_time - (philo->sleep_time + philo->eat_time)) * 0.01;
     pthread_mutex_lock(mtx_print);
-    printf("[%lu] Philosopher %i is thinking.\n", get_current_time(), philo->id);
+    printf("[%lu] Philosopher %i is thinking. time left:%lu\n", get_current_time() - philo->start, philo->id, philo->die_left);
     pthread_mutex_unlock(mtx_print);
     usleep(time);
     pthread_mutex_lock(mtx_print);
@@ -112,11 +104,9 @@ void do_think(t_philo *philo)
     {
         *(philo->total) = 0;
         philo->is_dead = 1;
-        printf("[%lu] Philosopher %i is dead.\n", get_current_time(), philo->id);
+        printf("[%lu] Philosopher %i is dead. time left: %lu\n", get_current_time() - philo->start, philo->id, philo->die_left);
     }
     else
-        time_left(&philo->die_left, time);
-    if (philo->id == 1)
-        printf("thinking, die left: %lu\n", philo->die_left);
+        set_time_left(&philo->die_left, (philo->die_left - time));
     pthread_mutex_unlock(mtx_print);
 }

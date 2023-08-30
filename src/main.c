@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:08:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 14:21:49 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 17:59:43 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void *routine(void *data)
 	t_philo *philo = (t_philo *)data;
 	int n;
 	
+	philo->start = get_current_time();
 	n = *(philo->total);
 	while (philo->is_dead == 0)
 	{
@@ -48,15 +49,12 @@ void *routine(void *data)
 void *do_report(void *data)
 {
 	t_philo *philo = (t_philo *)data;
-	(void)philo;
+	
 	create_threads(philo);
-	while(1)
+	/*while(*(philo->total) != 0)
 	{
-		if (*(philo->total) == 0)
-		{
-			break;
-		}
-	}
+		
+	}*/
 	join_thread(philo);
 	return(NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 13:07:33 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 17:32:43 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,8 @@ unsigned long get_us(unsigned long ms)
 
 unsigned long	get_current_time()
 {
-	unsigned long current_ms;
 	struct timeval current_us;
 	
 	gettimeofday(&current_us, NULL);
-	current_ms = get_ms(current_us.tv_usec);
-	return(current_us.tv_sec + current_ms);
+	return(current_us.tv_sec * 1000 + current_us.tv_usec / 1000);
 }

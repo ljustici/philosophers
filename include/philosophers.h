@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:17:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 12:46:44 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 19:38:10 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo
 	unsigned long	die_time;
 	unsigned long	sleep_time;
 	unsigned long	die_left;
+	unsigned long	start;
 	int	fork_right;
 	int	*fork_left;
 }	t_philo;
@@ -45,8 +46,8 @@ int				is_dead(unsigned long die_left, unsigned long activity);
 unsigned long	get_ms(suseconds_t usecs);
 unsigned long	get_us(unsigned long ms);
 unsigned long	get_current_time();
-void			time_left(unsigned long *die, unsigned long new);
-void			is_fork_taken(int *fork, int is_taken);
+void			set_time_left(unsigned long *die, unsigned long new);
+void			set_fork_taken(int *fork, int is_taken);
 
 void			*routine(void *data);
 void			do_take(t_philo *philo);
