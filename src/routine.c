@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 14:50:10 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 19:38:31 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 20:04:16 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void do_eat(t_philo *philo)
             set_time_left(&philo->die_left, philo->die_time);
             do_take(philo);
             printf("%s[%lu] Philosopher %i is eating.%s time left: %lu\n", YELLOW, get_current_time() - philo->start, philo->id, NC, philo->die_left);
-            usleep(time);
+            ft_usleep(time);
             set_fork_taken(&philo->fork_right,0);
             set_fork_taken(philo->fork_left,0);
             pthread_mutex_unlock(mutex);
@@ -72,7 +72,7 @@ void do_sleep(t_philo *philo)
 	pthread_mutex_lock(mtx_print);
 	printf("[%lu] Philosopher %i is sleeping. time left: %lu\n", get_current_time() - philo->start, philo->id, philo->die_left);
 	pthread_mutex_unlock(mtx_print);
-	usleep(time);
+	ft_usleep(time);
     pthread_mutex_lock(mtx_print);
     if (is_dead(philo->die_left, philo->sleep_time))
     {
@@ -98,7 +98,7 @@ void do_think(t_philo *philo)
     pthread_mutex_lock(mtx_print);
     printf("[%lu] Philosopher %i is thinking. time left:%lu\n", get_current_time() - philo->start, philo->id, philo->die_left);
     pthread_mutex_unlock(mtx_print);
-    usleep(time);
+    ft_usleep(time);
     pthread_mutex_lock(mtx_print);
     if (is_dead(philo->die_left, time))
     {

@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 17:32:43 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 20:10:36 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ t_philo	*parse_args(char **argv, int **n)
 		philo[i].fork_right = 0;
 		philo[i].id = i + 1;
 		philo[i].total = *n;
-		philo[i].die_time = get_us(ft_atoi(argv[2]));
-		philo[i].eat_time = get_us(ft_atoi(argv[3]));
-		philo[i].sleep_time = get_us(ft_atoi(argv[4]));
+		philo[i].die_time = ft_atoi(argv[2]);
+		philo[i].eat_time = ft_atoi(argv[3]);
+		philo[i].sleep_time = ft_atoi(argv[4]);
 		philo[i].die_left = philo[i].die_time;
 		philo[i].fork_right = 0;
 		philo[i].is_dead = 0;

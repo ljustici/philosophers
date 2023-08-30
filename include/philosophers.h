@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:17:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 19:38:10 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 20:23:43 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ typedef struct s_philo
 	int	*fork_left;
 }	t_philo;
 
+typedef struct s_table
+{
+	unsigned long	start;
+	int				total;
+	int				dead;
+}	t_table;
+
 int				ft_atoi(const char *str);
 t_philo			*parse_args(char **argv, int **n);
 
@@ -48,6 +55,7 @@ unsigned long	get_us(unsigned long ms);
 unsigned long	get_current_time();
 void			set_time_left(unsigned long *die, unsigned long new);
 void			set_fork_taken(int *fork, int is_taken);
+void			ft_usleep(unsigned long time);
 
 void			*routine(void *data);
 void			do_take(t_philo *philo);

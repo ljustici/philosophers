@@ -6,9 +6,11 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 11:20:36 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 19:39:13 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 19:54:28 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "philosophers.h"
 
 unsigned long get_routine_time(unsigned long die, unsigned long activity)
 {
