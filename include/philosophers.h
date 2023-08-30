@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:17:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/29 15:31:27 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 12:46:44 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,15 @@ typedef struct s_philo
 }	t_philo;
 
 int				ft_atoi(const char *str);
-int				parse_args(char **argv, t_philo **philo, int **n);
+t_philo			*parse_args(char **argv, int **n);
+
+unsigned long	get_routine_time(unsigned long die, unsigned long activity);
+int				is_dead(unsigned long die_left, unsigned long activity);
 unsigned long	get_ms(suseconds_t usecs);
 unsigned long	get_us(unsigned long ms);
 unsigned long	get_current_time();
+void			time_left(unsigned long *die, unsigned long new);
+void			is_fork_taken(int *fork, int is_taken);
 
 void			*routine(void *data);
 void			do_take(t_philo *philo);

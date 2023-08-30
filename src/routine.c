@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 14:50:10 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/29 17:04:30 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/30 14:21:11 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,54 @@
 
 void do_take(t_philo *philo)
 {   
-    philo->fork_right = 1;
+    is_fork_taken(&philo->fork_right,1);
+    is_fork_taken(philo->fork_left,1);
 	printf("[%lu] Philosopher %i has taken a fork.\n", get_current_time(), philo->id);
-    *(philo->fork_left) = 1;
 	printf("[%lu] Philosopher %i has taken a fork.\n", get_current_time(), philo->id);
 }
 
 void do_eat(t_philo *philo)
 {
     pthread_mutex_t *mutex;
+    unsigned long   time;
     
-    mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t*));
-    printf("a");
-    if (philo->die_left <= 0)
+    if (philo->is_dead)
         return ;
+    time = get_routine_time(philo->die_time, philo->eat_time);
+    mutex = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
     pthread_mutex_init(mutex, NULL);
     if (pthread_mutex_lock(mutex) != 0)
         pthread_mutex_unlock(mutex);
     else
     {
-        if (*(philo->fork_left) == 1 || philo->fork_right == 1)
+        if (!philo->fork_left || *(philo->fork_left) == 1 || philo->fork_right == 1)
             pthread_mutex_unlock(mutex);
         else
         {
+            time_left(&philo->die_left, philo->die_time);
             do_take(philo);
             printf("%s[%lu] Philosopher %i is eating.%s\n", YELLOW, get_current_time(), philo->id, NC);
-            philo->die_left = philo->die_time;
-            usleep(philo->eat_time);
-            philo->fork_right = 0;
-            *(philo->fork_left) = 0;
+            usleep(time);
+            is_fork_taken(&philo->fork_right,0);
+            is_fork_taken(philo->fork_left,0);
             pthread_mutex_unlock(mutex);
+            if (is_dead(philo->die_left, philo->eat_time))
+            {
+                *(philo->total) = 0;
+                philo->is_dead = 1;
+                pthread_mutex_lock(mutex);
+                printf("[%lu] Philosopher %i is dead.\n", get_current_time(), philo->id);
+                pthread_mutex_unlock(mutex);
+            }
+            else
+                time_left(&philo->die_left, time);
+            if (philo->id == 1)
+            {
+                pthread_mutex_lock(mutex);
+                printf("eating, die left: %lu\n", philo->die_left);
+                pthread_mutex_unlock(mutex);
+            }
         }
-        //pthread_mutex_destroy(&mutex);
-        if (philo->eat_time > philo->die_time)
-            philo->is_dead = 1;
     }
 }
 
@@ -56,22 +70,27 @@ void do_sleep(t_philo *philo)
 	unsigned long	time;
 	pthread_mutex_t	*mtx_print;
 
-    mtx_print = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t*));
+    if (philo->is_dead)
+        return ;
+    time = get_routine_time(philo->die_time, philo->sleep_time);
+    mtx_print = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(mtx_print, NULL);
-	if (philo->die_left <= 0)
-		return ;
-	if (philo->sleep_time > philo->die_time)
-		time = philo->sleep_time - philo->die_time;
-	else
-		time = philo->sleep_time;
 	pthread_mutex_lock(mtx_print);
 	printf("[%lu] Philosopher %i is sleeping.\n", get_current_time(), philo->id);
 	pthread_mutex_unlock(mtx_print);
 	usleep(time);
-	if (philo->die_left > time)
-		philo->die_left -= time;
-	else
-		philo->is_dead = 1;
+    pthread_mutex_lock(mtx_print);
+    if (is_dead(philo->die_left, philo->sleep_time))
+    {
+        *(philo->total) = 0;
+        philo->is_dead = 1;
+        printf("[%lu] Philosopher %i is dead. time left: %lu, time sleep: %lu\n", get_current_time(), philo->id, philo->die_left, philo->sleep_time);
+    }
+    else
+        time_left(&philo->die_left, time);
+    if (philo->id == 1)
+        printf("sleeping, die left: %lu\n", philo->die_left);
+    pthread_mutex_unlock(mtx_print);
 }
 
 void do_think(t_philo *philo)
@@ -79,17 +98,25 @@ void do_think(t_philo *philo)
     unsigned long   time;
     pthread_mutex_t *mtx_print;
 
-    mtx_print = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t*));
-    pthread_mutex_init(mtx_print, NULL);
-    if (philo->die_left <= 0)
+    if (philo->is_dead)
         return ;
-    time = philo->die_time - philo->sleep_time;
+    mtx_print = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
+    pthread_mutex_init(mtx_print, NULL);
+    time = (philo->die_time - (philo->sleep_time + philo->eat_time)) * 0.01;
     pthread_mutex_lock(mtx_print);
     printf("[%lu] Philosopher %i is thinking.\n", get_current_time(), philo->id);
     pthread_mutex_unlock(mtx_print);
     usleep(time);
-    if (philo->die_left > time)
-        philo->die_left -= time;
+    pthread_mutex_lock(mtx_print);
+    if (is_dead(philo->die_left, time))
+    {
+        *(philo->total) = 0;
+        philo->is_dead = 1;
+        printf("[%lu] Philosopher %i is dead.\n", get_current_time(), philo->id);
+    }
     else
-        philo->die_left = 0;
+        time_left(&philo->die_left, time);
+    if (philo->id == 1)
+        printf("thinking, die left: %lu\n", philo->die_left);
+    pthread_mutex_unlock(mtx_print);
 }
