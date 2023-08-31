@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:17:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/31 17:13:34 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/31 17:34:59 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ typedef struct s_philo
 	unsigned long	die_time;
 	unsigned long	sleep_time;
 	unsigned long	die_left;
-	unsigned long	start;
 	int				fork_right;
 	int				*fork_left;
 	t_table			*t;
@@ -63,6 +62,8 @@ void			do_take(t_philo *philo);
 void			do_eat(t_philo *philo);
 void			do_sleep(t_philo *philo);
 void			do_think(t_philo *philo);
+void set_death(t_philo *philo);
+void report_action(char *msg, t_philo philo);
 
 void			create_threads(t_philo *philo);
 void			join_thread(t_philo *philo);

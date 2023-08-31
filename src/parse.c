@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/31 17:16:43 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/31 17:39:34 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,3 @@ t_philo	*parse_args(char **argv, t_table **table)
 			return (NULL);
 	return (philo);
 }
-
