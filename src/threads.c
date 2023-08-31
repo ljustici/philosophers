@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:02 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 17:45:13 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:31:40 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void create_threads(t_philo *philo)
 
 	i = 0;
 	set_forks(philo);
-	while(i < *(philo->total))
+	while(i < philo->t->total)
 	{
 		if (pthread_create(&philo[i].philo, NULL, routine, &philo[i]) == -1)
 			printf("Error: pthread_create failed.\n");
@@ -30,7 +30,6 @@ void join_thread(t_philo *philo)
 {
 	void *rvalue = NULL;
 	pthread_join(philo->philo, &rvalue);
-	
 }
 
 void join_threads(t_philo *philo)
@@ -38,7 +37,7 @@ void join_threads(t_philo *philo)
 	int i;
 
 	i = 0;
-	while (i < *(philo->total))
+	while (i < philo->t->total)
 	{
 		pthread_join(philo[i].philo, NULL);
 		printf("Philosopher [%i] has died.\n", philo[i].id);

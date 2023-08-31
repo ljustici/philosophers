@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 20:10:36 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/31 17:16:43 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,50 +39,36 @@ int	ft_atoi(const char *str)
 	return (number * minus);
 }
 
-t_philo	*parse_args(char **argv, int **n)
+t_philo	*parse_args(char **argv, t_table **table)
 {
 	int	i;
 	t_philo *philo;
 	
 	i = 0;
-	**n = ft_atoi(argv[1]);
-	if (**n == 0)
+	(*table)->total = ft_atoi(argv[1]);
+	
+	(*table)->dead = 0;
+	if ((*table)->total == 0)
 		return (NULL);
-	philo = malloc(sizeof(t_philo) * (**n));
-	while (i < (**n))
+	philo = malloc(sizeof(t_philo) * ((*table)->total));
+	if (!philo)
+		return (NULL);
+	while (i < (*table)->total)
 	{
 		philo[i].fork_right = 0;
 		philo[i].id = i + 1;
-		philo[i].total = *n;
+		philo[i].is_dead = 0;
+		philo[i].n_times = 0;
 		philo[i].die_time = ft_atoi(argv[2]);
 		philo[i].eat_time = ft_atoi(argv[3]);
 		philo[i].sleep_time = ft_atoi(argv[4]);
 		philo[i].die_left = philo[i].die_time;
-		philo[i].fork_right = 0;
-		philo[i].is_dead = 0;
+		philo[i].t = *table;
 		i++;
 	}
-	
 	if (philo[i - 1].die_time == 0 || philo[i - 1].eat_time
 		== 0 || philo[i - 1].sleep_time == 0)
 			return (NULL);
 	return (philo);
 }
 
-unsigned long get_ms(suseconds_t usecs)
-{
-	return (usecs/1000);
-}
-
-unsigned long get_us(unsigned long ms)
-{
-	return (ms*1000);
-}
-
-unsigned long	get_current_time()
-{
-	struct timeval current_us;
-	
-	gettimeofday(&current_us, NULL);
-	return(current_us.tv_sec * 1000 + current_us.tv_usec / 1000);
-}

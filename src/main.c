@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:08:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 20:23:48 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/31 17:13:15 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ void *routine(void *data)
 	t_philo *philo = (t_philo *)data;
 	int n;
 	
-	philo->start = get_current_time();
-	n = *(philo->total);
+	n = 0;
 	while (philo->is_dead == 0)
 	{
 		do_eat(philo);
@@ -46,41 +45,43 @@ void *routine(void *data)
 	return (&philo->id);
 }
 
-void *do_report(void *data)
+void *do_check(void *data)
 {
 	t_philo *philo = (t_philo *)data;
 	
 	create_threads(philo);
-	/*while(*(philo->total) != 0)
+	while(philo->t->dead == 0)
 	{
 		
-	}*/
-	join_thread(philo);
+	}
+	join_thread(&philo[philo->t->dead]);
 	return(NULL);
 }
 
 int	main(int argc, char **argv)
 {
 	t_philo *philos;
-	int i;
+	t_table *table;
 	int *n;
-	pthread_t reporter = NULL;
+	pthread_t checker = NULL;
 
 	philos = NULL;
+	table = (t_table *)malloc(sizeof(t_table));
 	if (argc == 5 || argc == 6)
 	{
 		n = malloc(sizeof(int *));
-		philos = parse_args(argv, &n);
+		philos = parse_args(argv, &table);
 		if (!philos)
 		{
 			printf("Error: wrong arguments.\n");
 			return (-1);
 		}
-		pthread_create(&reporter, NULL, do_report, philos);
+		philos->t->start = get_current_time();
+		printf("total: %i, die: %lu", philos->t->total, philos[1].die_time);
+		pthread_create(&checker, NULL, do_check, philos);
 		//create_threads(philos);
-		pthread_join(reporter, NULL);
+		pthread_join(checker, NULL);
 		free(n);
-		i = 0;
 		/*while (i < (*n))
 		{
 			free(&philos[i]);

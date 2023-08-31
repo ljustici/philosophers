@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 19:54:19 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/31 16:30:04 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void set_forks(t_philo *philo)
 	int n;
 
 	i = 0;
-	n = *(philo->total);
+	n = philo->t->total;
 	i = 0;
 	while(i < n && n > 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 14:50:10 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/30 20:04:16 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/31 17:16:14 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void do_eat(t_philo *philo)
             pthread_mutex_unlock(mutex);
             if (is_dead(philo->die_left, philo->eat_time))
             {
-                *(philo->total) = 0;
+                philo->t->dead = philo->id;
                 philo->is_dead = 1;
                 pthread_mutex_lock(mutex);
                 printf("[%lu] Philosopher %i is dead.\n", get_current_time() - philo->start, philo->id);
@@ -76,7 +76,7 @@ void do_sleep(t_philo *philo)
     pthread_mutex_lock(mtx_print);
     if (is_dead(philo->die_left, philo->sleep_time))
     {
-        *(philo->total) = 0;
+        philo->t->dead = philo->id;
         philo->is_dead = 1;
         printf("[%lu] Philosopher %i is dead. time left: %lu, time sleep: %lu\n", get_current_time() - philo->start, philo->id, philo->die_left, philo->sleep_time);
     }
@@ -102,7 +102,7 @@ void do_think(t_philo *philo)
     pthread_mutex_lock(mtx_print);
     if (is_dead(philo->die_left, time))
     {
-        *(philo->total) = 0;
+        philo->t->dead = philo->id;
         philo->is_dead = 1;
         printf("[%lu] Philosopher %i is dead. time left: %lu\n", get_current_time() - philo->start, philo->id, philo->die_left);
     }
