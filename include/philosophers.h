@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:17:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/31 17:34:59 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/31 18:04:36 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int				ft_atoi(const char *str);
 t_philo			*parse_args(char **argv, t_table **table);
 
 unsigned long	get_routine_time(unsigned long die, unsigned long activity);
-int				is_dead(unsigned long die_left, unsigned long activity);
 unsigned long	get_ms(suseconds_t usecs);
 unsigned long	get_us(unsigned long ms);
 unsigned long	get_current_time();
@@ -62,7 +61,7 @@ void			do_take(t_philo *philo);
 void			do_eat(t_philo *philo);
 void			do_sleep(t_philo *philo);
 void			do_think(t_philo *philo);
-void set_death(t_philo *philo);
+int set_if_death(t_philo *philo, unsigned long activity);
 void report_action(char *msg, t_philo philo);
 
 void			create_threads(t_philo *philo);

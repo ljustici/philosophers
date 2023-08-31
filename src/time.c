@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 11:20:36 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/31 17:32:42 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/08/31 18:04:41 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,6 @@ unsigned long get_routine_time(unsigned long die, unsigned long activity)
     else
         time = activity;
     return (time);
-}
-
-int is_dead(unsigned long die_left, unsigned long activity)
-{
-    int is_dead;
-
-    is_dead = 0;
-    if (activity > die_left)
-        is_dead = 1;
-    return (is_dead);
 }
 
 void set_time_left(unsigned long *die, unsigned long new)
