@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/31 17:39:34 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/01 19:33:14 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,17 @@ int	ft_atoi(const char *str)
 	return (number * minus);
 }
 
-t_philo	*parse_args(char **argv, t_table **table)
+t_philo	*parse_args(char **argv, t_table **table, int argc, pthread_mutex_t *mtx)
 {
 	int	i;
 	t_philo *philo;
 	
 	i = 0;
 	(*table)->total = ft_atoi(argv[1]);
-	
 	(*table)->dead = 0;
 	if ((*table)->total == 0)
 		return (NULL);
+	(*table)->mtx = mtx;
 	philo = malloc(sizeof(t_philo) * ((*table)->total));
 	if (!philo)
 		return (NULL);
@@ -58,7 +58,7 @@ t_philo	*parse_args(char **argv, t_table **table)
 		philo[i].fork_right = 0;
 		philo[i].id = i + 1;
 		philo[i].is_dead = 0;
-		philo[i].n_times = 0;
+		philo[i].n_eaten = 0;
 		philo[i].die_time = ft_atoi(argv[2]);
 		philo[i].eat_time = ft_atoi(argv[3]);
 		philo[i].sleep_time = ft_atoi(argv[4]);
@@ -66,8 +66,12 @@ t_philo	*parse_args(char **argv, t_table **table)
 		philo[i].t = *table;
 		i++;
 	}
+	if (argc == 6)
+		(*table)->n_times = ft_atoi(argv[5]);
+	else
+		(*table)->n_times = -1;
 	if (philo[i - 1].die_time == 0 || philo[i - 1].eat_time
-		== 0 || philo[i - 1].sleep_time == 0)
+		== 0 || philo[i - 1].sleep_time == 0 || (*table)->n_times == 0)
 			return (NULL);
 	return (philo);
 }
