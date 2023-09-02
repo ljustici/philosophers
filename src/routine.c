@@ -6,11 +6,32 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 14:50:10 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/01 19:33:46 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/02 15:32:25 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+void *routine(void *data)
+{
+	t_philo *philo = (t_philo *)data;
+	int n;
+	
+	n = 0;
+	while (check_cond(philo))
+	{
+		do_eat(philo);
+		do_sleep(philo);
+		do_think(philo);
+	}
+    pthread_mutex_lock(philo->t->mtx_nt);
+    if (philo->t->n_times == philo->n_eaten)
+        philo->t->n_eaters++;
+    if (philo->is_dead)
+        philo->t->dead = philo->id;
+    pthread_mutex_unlock(philo->t->mtx_nt);
+	return (&philo->id);
+}
 
 void do_eat(t_philo *philo)
 {
@@ -19,7 +40,7 @@ void do_eat(t_philo *philo)
     unsigned long start;
     
     n_times = 0;
-    if (philo->is_dead)
+    if (!check_cond(philo))
         return ;
     time = get_routine_time(philo->die_time, philo->eat_time);
     start = get_current_time();
@@ -40,10 +61,10 @@ void do_sleep(t_philo *philo)
 {
 	unsigned long	time;
 
-    if (philo->is_dead)
+    if (!check_cond(philo))
         return ;
     time = get_routine_time(philo->die_time, philo->sleep_time);
-    report_action("is sleeping.", *philo);
+    report_action("is sleeping.", philo);
 	ft_usleep(time);
     set_time_left(&philo->die_left, (philo->die_left - time));
     set_if_death(philo, time);
@@ -53,42 +74,23 @@ void do_think(t_philo *philo)
 {
     unsigned long   time;
 
-    if (philo->is_dead)
+    if (!check_cond(philo))
         return ;
     time = (philo->die_time - (philo->sleep_time + philo->eat_time)) * 0.01;
-    report_action("is thinking.", *philo);
+    report_action("is thinking.", philo);
     ft_usleep(time);
     set_time_left(&philo->die_left, (philo->die_left - time));
     set_if_death(philo, time);
-}
-
-void *routine(void *data)
-{
-	t_philo *philo = (t_philo *)data;
-	int n;
-	
-	n = 0;
-	while (check_cond(philo))
-	{
-		do_eat(philo);
-		do_sleep(philo);
-		do_think(philo);
-	}
-    pthread_mutex_lock(philo->t->mtx);
-    if (philo->t->n_times != -1)
-        philo->t->n_eaters++;
-    pthread_mutex_unlock(philo->t->mtx);
-	return (&philo->id);
 }
 
 int check_cond(t_philo *philo)
 {
     int should_do;
     
-    pthread_mutex_lock(philo->t->mtx);
+    pthread_mutex_lock(philo->t->mtx_cond);
     should_do = 0;
     if (philo->is_dead == 0 && (philo->n_eaten < philo->t->n_times || philo->t->n_times == -1))
         should_do = 1;
-    pthread_mutex_unlock(philo->t->mtx);
+    pthread_mutex_unlock(philo->t->mtx_cond);
     return (should_do);
 }

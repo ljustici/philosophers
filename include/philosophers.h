@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:17:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/01 19:33:06 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/02 15:03:35 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ typedef struct s_table
 	int				dead;
 	int				n_times;
 	int				n_eaters;
-	pthread_mutex_t	*mtx;
+	pthread_mutex_t	*mtx_print;
+	pthread_mutex_t	*mtx_fork;
+	pthread_mutex_t	*mtx_nt;
+	pthread_mutex_t	*mtx_cond;
 }	t_table;
 
 typedef struct s_philo
@@ -49,7 +52,7 @@ typedef struct s_philo
 }	t_philo;
 
 int				ft_atoi(const char *str);
-t_philo			*parse_args(char **argv, t_table **table, int argc, pthread_mutex_t *mtx);
+t_philo			*parse_args(char **argv, t_table **table, int argc);
 
 unsigned long	get_routine_time(unsigned long die, unsigned long activity);
 unsigned long	get_ms(suseconds_t usecs);
@@ -65,13 +68,14 @@ void			do_eat(t_philo *philo);
 void			do_sleep(t_philo *philo);
 void			do_think(t_philo *philo);
 int set_if_death(t_philo *philo, unsigned long activity);
-void report_action(char *msg, t_philo philo);
+void report_action(char *msg, t_philo *philo);
 int take_right_fork(t_philo *philo);
 void release_forks(t_philo *philo);
 int check_cond(t_philo *philo);
 
 void			create_threads(t_philo *philo);
 void			join_thread(t_philo *philo);
+void join_threads(t_philo *philo);
 
 void			set_forks(t_philo *philo);
 void			destroy_mutexes(pthread_mutex_t *mutexes, int n);
