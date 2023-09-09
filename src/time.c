@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 11:20:36 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/01 15:21:34 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:32:37 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,23 @@ void set_time_left(unsigned long *die, unsigned long new)
     pthread_mutex_destroy(mtx_print);
 }
 
+void ft_usleep(unsigned long time)
+{
+    unsigned long start;
 
+    start = get_current_time();
+    //printf("%lu\n",time);
+    //cambiar start al programa en lugar de a cada philo 
+    while (get_current_time() - start < time)
+    {
+        usleep(1000);
+    }   
+}
+
+unsigned long	get_current_time()
+{
+	struct timeval current_us;
+	
+	gettimeofday(&current_us, NULL);
+	return(current_us.tv_sec * 1000 + current_us.tv_usec / 1000);
+}

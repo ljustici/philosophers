@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 14:50:10 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/02 15:32:25 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/08 14:55:13 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,19 @@ void *routine(void *data)
 	n = 0;
 	while (check_cond(philo))
 	{
-		do_eat(philo);
-		do_sleep(philo);
-		do_think(philo);
+        if (philo->id % 2 != 0)
+        {
+		    do_eat(philo);
+		    do_sleep(philo);
+		    do_think(philo);
+        }
+        else
+        {
+            do_sleep(philo);
+            do_think(philo);
+            do_eat(philo);
+        }
 	}
-    pthread_mutex_lock(philo->t->mtx_nt);
-    if (philo->t->n_times == philo->n_eaten)
-        philo->t->n_eaters++;
-    if (philo->is_dead)
-        philo->t->dead = philo->id;
-    pthread_mutex_unlock(philo->t->mtx_nt);
 	return (&philo->id);
 }
 
@@ -89,8 +92,10 @@ int check_cond(t_philo *philo)
     
     pthread_mutex_lock(philo->t->mtx_cond);
     should_do = 0;
-    if (philo->is_dead == 0 && (philo->n_eaten < philo->t->n_times || philo->t->n_times == -1))
+    if (philo->is_dead == 0 && did_all_eat(philo) == 0 && is_there_dead(philo) == 0)
         should_do = 1;
+    else
+        set_stop(philo);
     pthread_mutex_unlock(philo->t->mtx_cond);
     return (should_do);
 }

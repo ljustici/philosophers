@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/02 12:55:06 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/08 16:23:16 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,10 @@ t_philo	*parse_args(char **argv, t_table **table, int argc)
 	(*table)->dead = 0;
 	if ((*table)->total == 0)
 		return (NULL);
-	(*table)->mtx_print = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-	(*table)->mtx_fork = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-	(*table)->mtx_nt = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-	(*table)->mtx_cond = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init((*table)->mtx_print, NULL);
-	pthread_mutex_init((*table)->mtx_fork, NULL);
-	pthread_mutex_init((*table)->mtx_nt, NULL);
-	pthread_mutex_init((*table)->mtx_cond, NULL);
 	philo = malloc(sizeof(t_philo) * ((*table)->total));
 	if (!philo)
 		return (NULL);
+	create_mutexes(table, philo);
 	while (i < (*table)->total)
 	{
 		philo[i].fork_right = 0;

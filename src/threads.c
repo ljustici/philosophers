@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:02 by ljustici          #+#    #+#             */
-/*   Updated: 2023/08/31 16:31:40 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/08 09:56:59 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void join_threads(t_philo *philo)
 	while (i < philo->t->total)
 	{
 		pthread_join(philo[i].philo, NULL);
-		printf("Philosopher [%i] has died.\n", philo[i].id);
 		i++;
 	}
 }
