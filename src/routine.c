@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 14:50:10 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/08 14:55:13 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/10 16:45:37 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void do_sleep(t_philo *philo)
     if (!check_cond(philo))
         return ;
     time = get_routine_time(philo->die_time, philo->sleep_time);
-    report_action("is sleeping.", philo);
+    report_action("is sleeping.", *philo);
 	ft_usleep(time);
     set_time_left(&philo->die_left, (philo->die_left - time));
     set_if_death(philo, time);
@@ -80,7 +80,7 @@ void do_think(t_philo *philo)
     if (!check_cond(philo))
         return ;
     time = (philo->die_time - (philo->sleep_time + philo->eat_time)) * 0.01;
-    report_action("is thinking.", philo);
+    report_action("is thinking.", *philo);
     ft_usleep(time);
     set_time_left(&philo->die_left, (philo->die_left - time));
     set_if_death(philo, time);

@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:02 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/08 09:56:59 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/10 17:15:40 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ void create_threads(t_philo *philo)
 
 	i = 0;
 	set_forks(philo);
+	pthread_mutex_lock(philo->t->mtx_print);
+	philo->t->start = get_current_time();
+	pthread_mutex_unlock(philo->t->mtx_print);
 	while(i < philo->t->total)
 	{
 		if (pthread_create(&philo[i].philo, NULL, routine, &philo[i]) == -1)

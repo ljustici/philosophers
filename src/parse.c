@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/08 16:23:16 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/10 16:46:29 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	ft_atoi(const char *str)
 
 t_philo	*parse_args(char **argv, t_table **table, int argc)
 {
-	int	i;
-	t_philo *philo;
+	int		i;
+	t_philo	*philo;
 	
 	i = 0;
 	(*table)->total = ft_atoi(argv[1]);
@@ -74,4 +74,22 @@ t_philo	*parse_args(char **argv, t_table **table, int argc)
 		== 0 || philo[i - 1].sleep_time == 0 || (*table)->n_times == 0)
 			return (NULL);
 	return (philo);
+}
+
+void	set_forks(t_philo *philo)
+{
+	int	i;
+	int	n;
+
+	i = 0;
+	n = philo->t->total;
+	i = 0;
+	while(i < n && n > 1)
+	{
+		if (i == n - 1)
+			philo[i].fork_left = &philo[0].fork_right;
+		else
+			philo[i].fork_left = &philo[i + 1].fork_right;
+		i++;
+	}
 }
