@@ -6,28 +6,21 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/10 15:11:10 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/14 15:53:22 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "philo.h"
 
-void	create_mutexes(t_table **table, t_philo *philo)
+void	init_mutexes(t_table **table, t_philo *philo)
 {
 	int	i;
-	
-	(*table)->mtx_print = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-	(*table)->mtx_nt = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-	(*table)->mtx_cond = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-	(*table)->mtx_check = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init((*table)->mtx_print, NULL);
-	pthread_mutex_init((*table)->mtx_nt, NULL);
-	pthread_mutex_init((*table)->mtx_cond, NULL);
-	pthread_mutex_init((*table)->mtx_check, NULL);
+
 	i = 0;
 	while (i < (*table)->total)
 	{
-		philo[i].mtx_fork_r = (pthread_mutex_t*)malloc(sizeof(pthread_mutex_t));
+		philo[i].mtx_fork_r = (pthread_mutex_t *)
+			malloc(sizeof(pthread_mutex_t));
 		pthread_mutex_init(philo[i].mtx_fork_r, NULL);
 		i++;
 	}
@@ -41,12 +34,25 @@ void	create_mutexes(t_table **table, t_philo *philo)
 	}
 }
 
+void	create_mutexes(t_table **table, t_philo *philo)
+{
+	(*table)->mtx_print = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	(*table)->mtx_nt = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	(*table)->mtx_cond = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
+	(*table)->mtx_check = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init((*table)->mtx_print, NULL);
+	pthread_mutex_init((*table)->mtx_nt, NULL);
+	pthread_mutex_init((*table)->mtx_cond, NULL);
+	pthread_mutex_init((*table)->mtx_check, NULL);
+	init_mutexes(table, philo);
+}
+
 void	destroy_mutexes(t_philo *philo)
 {
 	int	i;
 
 	i = 0;
-	while(i < philo->t->total)
+	while (i < philo->t->total)
 	{
 		if (pthread_mutex_destroy(philo[i].mtx_fork_r) == -1)
 			write(2, "Internal error: pthread_mutex_destroy failed.\n", 46);
@@ -62,34 +68,23 @@ void	destroy_mutexes(t_philo *philo)
 		write(2, "Internal error: pthread_mutex_destroy failed.\n", 46);
 }
 
-void set_stop(t_philo *philo)
+int	is_there_dead(t_philo *philo)
 {
-    pthread_mutex_lock(philo->t->mtx_check);
-    philo->t->dead = philo->id;
-    pthread_mutex_unlock(philo->t->mtx_check);
+	int	is_dead;
+
+	pthread_mutex_lock(philo->t->mtx_check);
+	if (philo->t->dead != 0)
+		is_dead = philo->t->dead;
+	else
+		is_dead = 0;
+	pthread_mutex_unlock(philo->t->mtx_check);
+	return (is_dead);
 }
 
-int is_there_dead(t_philo *philo)
+void	set_if_death(t_philo *philo)
 {
-    int is_dead;
-    pthread_mutex_lock(philo->t->mtx_check);
-    if (philo->t->dead != 0)
-        is_dead = philo->t->dead;
-    else
-        is_dead = 0;
-    pthread_mutex_unlock(philo->t->mtx_check);
-    return (is_dead);
-}
-
-int set_if_death(t_philo *philo, unsigned long activity)
-{
-    (void)activity;
-    if (!check_cond(philo))
-        return (0);
-    if (philo->die_left <= 0)
-    {
-        philo->is_dead = 1;
-        return (1);
-    }
-    return (0);
+	if (philo->die_left <= 0)
+	{
+		philo->is_dead = 1;
+	}
 }
