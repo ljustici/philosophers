@@ -6,11 +6,11 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:08:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/14 15:53:08 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:09:59 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 void	report_action(char *msg, t_philo philo)
 {
@@ -77,11 +77,16 @@ void	free_philos(t_philo *philo)
 	int	i;
 
 	i = 0;
+	free(philo->t->mtx_print);
+	free(philo->t->mtx_nt);
+	free(philo->t->mtx_cond);
+	free(philo->t->mtx_check);
 	while (i < philo->t->total)
 	{
-		free(&philo[i]);
+		free(philo[i].mtx_fork_r);
 		i++;
 	}
+	free(philo);
 }
 
 void	set_stop(t_philo *philo, int all_ate)
@@ -95,3 +100,14 @@ void	set_stop(t_philo *philo, int all_ate)
 		pthread_mutex_unlock(philo->t->mtx_check);
 	}
 }
+
+/*
+atexit(ft_leaks);
+
+void ft_leaks()
+{
+	system("leaks -q --fullContent   philo");
+}
+
+en CFLAGS #-fsanitize=thread -g
+*/

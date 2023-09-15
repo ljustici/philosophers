@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:17:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/14 18:49:54 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:05:49 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,26 @@ typedef struct s_philo
 int				ft_atoi(const char *str);
 t_philo			*parse_args(char **argv, t_table **table, int argc);
 void			set_forks(t_philo *philo);
+void			free_philos(t_philo *philo);
 
-unsigned long	get_routine_time(unsigned long die, unsigned long activity);
 unsigned long	get_current_time(void);
-void			set_time_left(t_philo *philo, int is_reset, unsigned long time);
 void			ft_usleep(unsigned long time);
+int				time_last_eat(t_philo *philo);
+unsigned long	get_t_last_eat(t_philo *philo);
+int				should_philo_die(t_philo *philo, unsigned long activity);
 
 int				did_all_eat(t_philo *philo);
 int				grab_forks(t_philo *philo);
 void			release_forks(t_philo *philo);
-int				do_try_fork(t_philo *philo, unsigned long time);
+int				do_try_fork(t_philo *philo);
 
 void			*routine(void *data);
 void			do_take(t_philo *philo);
 void			do_eat(t_philo *philo);
 void			do_sleep(t_philo *philo);
 void			do_think(t_philo *philo);
+void			eating(t_philo *philo);
 
-void			set_if_death(t_philo *philo);
 void			report_action(char *msg, t_philo philo);
 int				check_cond(t_philo *philo);
 void			set_stop(t_philo *philo, int all_ate);
@@ -88,9 +90,5 @@ void			destroy_mutexes(t_philo *philo);
 
 int				all_created(t_philo *philo);
 int				is_there_start(t_philo *philo);
-
-void			free_philos(t_philo *philo);
-
-int				time_last_eat(t_philo *philo);
 
 #endif

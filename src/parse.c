@@ -6,11 +6,11 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/14 15:53:18 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:10:15 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 int	ft_atoi(const char *str)
 {

@@ -6,19 +6,26 @@
 #    By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/21 12:13:15 by ljustici          #+#    #+#              #
-#    Updated: 2023/08/21 14:36:12 by ljustici         ###   ########.fr        #
+#    Updated: 2023/09/15 18:30:39 by ljustici         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME        := philosophers
+NAME        := philo
 
-INCLUDES	= -I include
+SRC_DIR		:= src/
+_SRCS       := eat_utils.c \
+				rout_utils.c \
+				main.c \
+				parse.c \
+				time.c \
+				routine.c \
+				threads.c \
 
-SRCS        := src/*.c
-OBJS		:= obj/*.o
+SRCS		:= ${addprefix ${SRC_DIR}, ${_SRCS}}
+OBJS		:= $(SRCS:.c=.o)
 
 CC          := @gcc
-CFLAGS      := -Wall -Wextra -Werror -g
+CFLAGS      := -Wall -Wextra -Werror
 
 RM          := @rm -rf
 MAKE        := @$(MAKE) --silent --no-print-directory
@@ -26,14 +33,8 @@ MAKE        := @$(MAKE) --silent --no-print-directory
 all:  $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(INCLUDES) $(CFLAGS)  -o $(NAME) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 	$(info created $(NAME))
-
-$(OBJS): $(SRCS)
-	$(CC) $(INCLUDES) $(CFLAGS) -c $(SRCS)
-	@mkdir -p obj
-	@mv *.o obj
-	$(info created object files)
 
 clean:
 	$(RM) $(OBJS)

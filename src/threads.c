@@ -6,11 +6,11 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:02 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/14 15:53:31 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:09:53 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 void	create_threads(t_philo *philo)
 {

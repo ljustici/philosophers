@@ -6,11 +6,11 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 14:50:10 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/14 18:49:58 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:09:55 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 void	*routine(void *data)
 {
@@ -43,37 +43,35 @@ void	*routine(void *data)
 
 void	do_eat(t_philo *philo)
 {
-	unsigned long	time;
 	int				n_times;
 	unsigned long	start;
 
 	n_times = 0;
 	if (!check_cond(philo))
 		return ;
-	time = get_routine_time(philo->die_time, philo->eat_time);
-	while (n_times < 1 && time_last_eat(philo) == 0) //&& philo->die_left > 0
+	while (n_times < 1 && time_last_eat(philo) == 0)
 	{
 		start = get_current_time();
-		if (do_try_fork(philo, time) == 1)
+		if (do_try_fork(philo) == 1)
 			n_times = 1;
-		//else
-			//set_time_left(philo, 0, get_current_time() - start);
 	}
-	//set_if_death(philo);
 }
 
 void	do_sleep(t_philo *philo)
 {
-	unsigned long	time;
+	int				should_die;
 
 	if (!check_cond(philo))
 		return ;
-	time = get_routine_time(philo->die_time, philo->sleep_time);
+	should_die = should_philo_die(philo, philo->sleep_time);
 	report_action("is sleeping", *philo);
-	ft_usleep(time);
-	//set_time_left(philo, 0, time);
-	time_last_eat(philo);
-	//set_if_death(philo);
+	if (should_die)
+	{
+		ft_usleep(philo->die_time - get_t_last_eat(philo));
+		philo->is_dead = 1;
+	}
+	else
+		ft_usleep(philo->sleep_time);
 }
 
 void	do_think(t_philo *philo)
@@ -88,9 +86,6 @@ void	do_think(t_philo *philo)
 		time = 0;
 	report_action("is thinking", *philo);
 	ft_usleep(time);
-	//set_time_left(philo, 0, time);
-	time_last_eat(philo);
-	//set_if_death(philo);
 }
 
 int	check_cond(t_philo *philo)

@@ -6,11 +6,11 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 18:07:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/14 15:53:22 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:09:57 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
 void	init_mutexes(t_table **table, t_philo *philo)
 {
@@ -81,10 +81,17 @@ int	is_there_dead(t_philo *philo)
 	return (is_dead);
 }
 
-void	set_if_death(t_philo *philo)
+void	eating(t_philo *philo)
 {
-	if (philo->die_left <= 0)
+	int				should_die;
+
+	should_die = should_philo_die(philo, philo->eat_time);
+	report_action("is eating", *philo);
+	if (should_die)
 	{
+		ft_usleep(philo->die_time - get_t_last_eat(philo));
 		philo->is_dead = 1;
 	}
+	else
+		ft_usleep(philo->eat_time);
 }

@@ -6,31 +6,22 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 11:20:36 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/14 18:49:46 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:09:50 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
-unsigned long	get_routine_time(unsigned long die, unsigned long activity)
+int	should_philo_die(t_philo *philo, unsigned long activity)
 {
-	unsigned long	time;
+	unsigned long	last_eat;
+	int				should_die;
 
-	if (activity > die)
-		time = die;
-	else
-		time = activity;
-	return (time);
-}
-
-void	set_time_left(t_philo *philo, int is_reset, unsigned long time)
-{
-	if (is_reset)
-		philo->die_left = time;
-	else if (time < philo->die_left)
-		philo->die_left -= time;
-	else
-		philo->die_left = 0;
+	should_die = 0;
+	last_eat = get_t_last_eat(philo);
+	if (last_eat + activity >= philo->die_time)
+		should_die = 1;
+	return (should_die);
 }
 
 void	ft_usleep(unsigned long time)
@@ -54,13 +45,18 @@ unsigned long	get_current_time(void)
 
 int	time_last_eat(t_philo *philo)
 {
-	int is_dead;
+	int	is_dead;
 
 	is_dead = 0;
-	if (get_current_time() - philo->die_left >= philo->die_time)
+	if (get_t_last_eat(philo) >= philo->die_time)
 	{
 		philo->is_dead = 1;
 		is_dead = 1;
 	}
 	return (is_dead);
+}
+
+unsigned long	get_t_last_eat(t_philo *philo)
+{
+	return (get_current_time() - philo->die_left);
 }

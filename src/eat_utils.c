@@ -6,28 +6,25 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 17:21:57 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/14 17:29:32 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:10:01 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../include/philo.h"
 
-int	do_try_fork(t_philo *philo, unsigned long time)
+int	do_try_fork(t_philo *philo)
 {
-	int	has_fork;
+	int				has_fork;
 
 	if (!check_cond(philo))
 		return (0);
 	has_fork = grab_forks(philo);
 	if (has_fork == 2)
 	{
-		//set_time_left(philo, 1, philo->die_time);
 		philo->die_left = get_current_time();
-		report_action("is eating", *philo);
+		eating(philo);
 		has_fork = 1;
-		ft_usleep(time);
 		release_forks(philo);
-		//set_time_left(philo, 0, time);
 		philo->n_eaten++;
 		set_eater(philo);
 	}
