@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:08:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/16 16:27:57 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:16:34 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	main(int argc, char **argv)
 		if (pthread_create(&checker, NULL, do_check, philos) == 0)
 			pthread_join(checker, NULL);
 	}
+	else
+		return (0);
 	free_philos(philos);
 	free(table);
 	return (0);

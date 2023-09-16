@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 15:47:37 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/16 17:25:14 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:15:54 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ long	ft_atoi(const char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		number = number * 10 + (str[i] - '0');
+		if (number >= 2147483647)
+			return (0);
 		i++;
 	}
-	if (number >= 2147483647)
-		return (0);
 	return (number);
 }
 

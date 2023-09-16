@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 11:20:36 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/15 18:09:50 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/16 18:20:57 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_usleep(unsigned long time)
 	start = get_current_time();
 	while (get_current_time() - start < time)
 	{
-		usleep(1000);
+		usleep(50);
 	}
 }
 
