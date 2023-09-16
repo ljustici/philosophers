@@ -6,7 +6,7 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:17:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/15 17:05:49 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/16 17:19:59 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,11 @@ typedef struct s_philo
 	t_table			*t;
 }	t_philo;
 
-int				ft_atoi(const char *str);
+long			ft_atoi(const char *str);
 t_philo			*parse_args(char **argv, t_table **table, int argc);
 void			set_forks(t_philo *philo);
 void			free_philos(t_philo *philo);
+int				ft_strlen(char *str);
 
 unsigned long	get_current_time(void);
 void			ft_usleep(unsigned long time);
@@ -85,7 +86,9 @@ void			set_eater(t_philo *philo);
 
 void			create_threads(t_philo *philo);
 void			join_threads(t_philo *philo);
-void			create_mutexes(t_table **table, t_philo *philo);
+int				init_table_mutexes(t_table **table, t_philo *philo);
+int				create_philo_mutexes(t_table **table, t_philo *philo);
+int				create_mutexes(t_table **table, t_philo *philo);
 void			destroy_mutexes(t_philo *philo);
 
 int				all_created(t_philo *philo);

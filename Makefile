@@ -6,7 +6,7 @@
 #    By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/21 12:13:15 by ljustici          #+#    #+#              #
-#    Updated: 2023/09/15 18:33:45 by ljustici         ###   ########.fr        #
+#    Updated: 2023/09/16 16:01:53 by ljustici         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ _SRCS       := eat_utils.c \
 				time.c \
 				routine.c \
 				threads.c \
+				mutexes.c \
 
 SRCS		:= ${addprefix ${SRC_DIR}, ${_SRCS}}
 OBJS		:= $(SRCS:.c=.o)

@@ -6,18 +6,11 @@
 /*   By: ljustici <ljustici@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 12:08:19 by ljustici          #+#    #+#             */
-/*   Updated: 2023/09/15 18:09:59 by ljustici         ###   ########.fr       */
+/*   Updated: 2023/09/16 16:27:57 by ljustici         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-void	report_action(char *msg, t_philo philo)
-{
-	pthread_mutex_lock(philo.t->mtx_print);
-	printf("%lu %i %s\n", get_current_time() - philo.t->start, philo.id, msg);
-	pthread_mutex_unlock(philo.t->mtx_print);
-}
 
 void	*do_check(void *data)
 {
@@ -61,44 +54,16 @@ int	main(int argc, char **argv)
 		philos = parse_args(argv, &table, argc);
 		if (!philos)
 		{
+			free(table);
 			write(2, "Error: wrong arguments.\n", 24);
 			return (-1);
 		}
-		pthread_create(&checker, NULL, do_check, philos);
-		pthread_join(checker, NULL);
+		if (pthread_create(&checker, NULL, do_check, philos) == 0)
+			pthread_join(checker, NULL);
 	}
 	free_philos(philos);
 	free(table);
 	return (0);
-}
-
-void	free_philos(t_philo *philo)
-{
-	int	i;
-
-	i = 0;
-	free(philo->t->mtx_print);
-	free(philo->t->mtx_nt);
-	free(philo->t->mtx_cond);
-	free(philo->t->mtx_check);
-	while (i < philo->t->total)
-	{
-		free(philo[i].mtx_fork_r);
-		i++;
-	}
-	free(philo);
-}
-
-void	set_stop(t_philo *philo, int all_ate)
-{
-	if (all_ate)
-		return ;
-	else
-	{
-		pthread_mutex_lock(philo->t->mtx_check);
-		philo->t->dead = philo->id;
-		pthread_mutex_unlock(philo->t->mtx_check);
-	}
 }
 
 /*
